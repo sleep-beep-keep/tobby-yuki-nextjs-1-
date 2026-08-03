@@ -7,7 +7,7 @@ import { productSelect, toProduct } from "@/lib/storefront";
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const supabase = await createClient();
-  const { data, error } = await supabase.from("products").select(productSelect).eq("slug", slug).maybeSingle();
+  const { data, error } = await supabase.from("products").select(productSelect).eq("is_active", true).eq("slug", slug).maybeSingle();
   if (error) throw new Error(`Unable to load product: ${error.message}`);
   if (!data) notFound();
   const product = toProduct(data);

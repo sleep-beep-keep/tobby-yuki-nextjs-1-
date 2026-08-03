@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CartProvider from "@/components/CartProvider";
+import AuthProvider from "@/components/AuthProvider";
 
 export const metadata: Metadata = {
   title: "Tobby & Yuki | Pawsome by Design",
@@ -13,11 +14,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
-        <CartProvider>
-        <Navbar />
-        {children}
-        <Footer />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

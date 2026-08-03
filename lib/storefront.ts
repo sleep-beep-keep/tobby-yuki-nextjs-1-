@@ -15,7 +15,7 @@ type ProductRow = {
   base_price: number;
   pet_type: "dog" | "cat";
   category: string;
-  images: string;
+  images: string | string[];
   description: string;
   is_featured: boolean;
 };
@@ -28,7 +28,7 @@ export function toProduct(row: ProductRow): Product {
     price: row.base_price,
     pet: row.pet_type === "dog" ? "dogs" : "cats",
     category: row.category,
-    image: row.images,
+    image: Array.isArray(row.images) ? row.images[0] ?? "" : row.images,
     description: row.description,
     featured: row.is_featured,
   };

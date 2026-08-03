@@ -52,6 +52,7 @@ export default function AccountPage() {
   async function signOut() {
     await createClient().auth.signOut();
     setUser(null);
+    router.push("/");
     router.refresh();
   }
 

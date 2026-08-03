@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronDown, Heart, Menu, PawPrint, Search, ShoppingBag, UserRound } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "./CartProvider";
+import { useAuth } from "./AuthProvider";
 
 const menuGroups = [
   { title: "Shop dogs", links: [["Shop all dogs", "/dogs"], ["Harnesses", "/shop/harnesses"], ["Raincoats", "/shop/raincoats"], ["Leashes & collars", "/shop/leashes"]] },
@@ -14,6 +15,8 @@ const menuGroups = [
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { itemCount } = useCart();
+  const { user, loading } = useAuth();
+  const accountLabel = loading ? "Account" : user ? "Profile" : "Sign in";
 
   return (
     <>
@@ -35,7 +38,7 @@ export default function Navbar() {
           </div>
           <div className="flex items-center gap-4">
             <button aria-label="Search"><Search size={20} /></button>
-            <Link href="/account" aria-label="Account" className="hidden sm:block"><UserRound size={20} /></Link>
+            <Link href="/account" aria-label={accountLabel} className="hidden items-center gap-2 text-sm font-semibold text-cocoa sm:flex"><UserRound size={20} /><span>{accountLabel}</span></Link>
             <button aria-label="Wishlist"><Heart size={20} /></button>
             <Link href="/cart" aria-label={`Cart with ${itemCount} items`} className="relative"><ShoppingBag size={21} />{itemCount > 0 && <span className="absolute -right-2 -top-2 grid h-4 min-w-4 place-items-center rounded-full bg-rose px-1 text-[10px] font-bold text-white">{itemCount}</span>}</Link>
           </div>

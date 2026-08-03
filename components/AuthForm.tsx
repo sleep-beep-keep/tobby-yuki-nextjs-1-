@@ -25,7 +25,10 @@ export default function AuthForm() {
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) setMessage(error.message);
-      else router.replace("/account");
+      else {
+        router.replace("/account");
+        router.refresh();
+      }
     }
 
     setSubmitting(false);

@@ -20,7 +20,7 @@ const categoryIcons: Record<string, string> = {
 
 export default async function CategoryNav() {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("products").select("category").order("category");
+  const { data, error } = await supabase.from("products").select("category").eq("is_active", true).order("category");
   if (error) throw new Error(`Unable to load categories: ${error.message}`);
 
   const categories = [...new Set((data ?? []).map(({ category }) => category))];

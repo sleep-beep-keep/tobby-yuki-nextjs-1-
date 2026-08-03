@@ -8,8 +8,8 @@ import { productSelect, toProduct } from "@/lib/storefront";
 export default async function Home() {
   const supabase = await createClient();
   const [{ data: dogRows, error: dogError }, { data: catRows, error: catError }] = await Promise.all([
-    supabase.from("products").select(productSelect).eq("pet_type", "dog").eq("is_featured", true).order("created_at", { ascending: false }).limit(6),
-    supabase.from("products").select(productSelect).eq("pet_type", "cat").eq("is_featured", true).order("created_at", { ascending: false }).limit(6),
+    supabase.from("products").select(productSelect).eq("is_active", true).eq("pet_type", "dog").eq("is_featured", true).order("created_at", { ascending: false }).limit(6),
+    supabase.from("products").select(productSelect).eq("is_active", true).eq("pet_type", "cat").eq("is_featured", true).order("created_at", { ascending: false }).limit(6),
   ]);
   if (dogError) throw new Error(`Unable to load dog products: ${dogError.message}`);
   if (catError) throw new Error(`Unable to load cat products: ${catError.message}`);
