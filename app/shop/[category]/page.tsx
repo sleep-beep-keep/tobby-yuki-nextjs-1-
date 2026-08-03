@@ -1,14 +1,20 @@
 import SortableProductGrid from "@/components/SortableProductGrid";
-import { products } from "@/data/products";
+import { createClient } from "@/lib/supabase/server";
+import { productSelect, toProduct } from "@/lib/storefront";
 
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;
   const normalized = decodeURIComponent(category).toLowerCase();
-  const filtered = normalized === "new-arrivals"
-    ? products.slice(-6)
-    : normalized === "coming-soon"
-      ? []
-      : products.filter(p => p.category === normalized);
+  const supabase = await createClient();
+  let filtered = [];
+
+  if (normalized !== "coming-soon") {
+    let query = supabase.from("products").select(productSelect).order("created_at", { ascending: false });
+    query = normalized === "new-arrivals" ? query.eq("featured", true).limit(6) : query.eq("category", normalized);
+    const { data, error } = await query;
+    if (error) throw new Error(`Unable to load products in ${normalized}: ${error.message}`);
+    filtered = (data ?? []).map(toProduct);
+  }
 
   const title = normalized.replaceAll("-", " ");
   return (

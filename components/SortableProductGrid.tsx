@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { Product } from "@/data/products";
+import type { Product } from "@/lib/storefront";
 import ProductGrid from "./ProductGrid";
 
 type SortOption = "featured" | "price-low" | "price-high" | "name";

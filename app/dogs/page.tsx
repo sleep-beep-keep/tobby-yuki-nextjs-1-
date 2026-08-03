@@ -1,8 +1,17 @@
 import SortableProductGrid from "@/components/SortableProductGrid";
-import { products, dogCategories } from "@/data/products";
+import { createClient } from "@/lib/supabase/server";
+import { productSelect, toProduct } from "@/lib/storefront";
 
-export default function DogsPage() {
-  const dogProducts = products.filter(p => p.pet === "dogs");
+export default async function DogsPage() {
+  const supabase = await createClient();
+  const [{ data: productRows, error: productError }, { data: categoryRows, error: categoryError }] = await Promise.all([
+    supabase.from("products").select(productSelect).eq("pet", "dogs").order("created_at", { ascending: false }),
+    supabase.from("products").select("category").eq("pet", "dogs").order("category"),
+  ]);
+  if (productError) throw new Error(`Unable to load dog products: ${productError.message}`);
+  if (categoryError) throw new Error(`Unable to load dog categories: ${categoryError.message}`);
+  const dogProducts = (productRows ?? []).map(toProduct);
+  const dogCategories = [...new Set((categoryRows ?? []).map(({ category }) => category))];
   return (
     <main className="mx-auto max-w-7xl px-4 py-12">
       <div className="rounded-[2rem] bg-[#f5e9df] px-7 py-14 text-center">

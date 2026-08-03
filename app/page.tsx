@@ -2,11 +2,19 @@ import Hero from "@/components/Hero";
 import CategoryNav from "@/components/CategoryNav";
 import ShopByPet from "@/components/ShopByPet";
 import ProductGrid from "@/components/ProductGrid";
-import { products } from "@/data/products";
+import { createClient } from "@/lib/supabase/server";
+import { productSelect, toProduct } from "@/lib/storefront";
 
-export default function Home() {
-  const dogs = products.filter(p => p.pet === "dogs" && p.featured).slice(0, 6);
-  const cats = products.filter(p => p.pet === "cats" && p.featured).slice(0, 6);
+export default async function Home() {
+  const supabase = await createClient();
+  const [{ data: dogRows, error: dogError }, { data: catRows, error: catError }] = await Promise.all([
+    supabase.from("products").select(productSelect).eq("pet", "dogs").eq("featured", true).order("created_at", { ascending: false }).limit(6),
+    supabase.from("products").select(productSelect).eq("pet", "cats").eq("featured", true).order("created_at", { ascending: false }).limit(6),
+  ]);
+  if (dogError) throw new Error(`Unable to load dog products: ${dogError.message}`);
+  if (catError) throw new Error(`Unable to load cat products: ${catError.message}`);
+  const dogs = (dogRows ?? []).map(toProduct);
+  const cats = (catRows ?? []).map(toProduct);
 
   return (
     <main>

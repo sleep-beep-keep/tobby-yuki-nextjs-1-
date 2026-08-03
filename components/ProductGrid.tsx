@@ -1,5 +1,5 @@
 import ProductCard from "./ProductCard";
-import type { Product } from "@/data/products";
+import type { Product } from "@/lib/storefront";
 
 export default function ProductGrid({ products }: { products: Product[] }) {
   if (!products.length) return <p className="py-16 text-center text-gray-500">No products found yet.</p>;

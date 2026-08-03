@@ -1,9 +1,13 @@
 import SortableProductGrid from "@/components/SortableProductGrid";
-import { products } from "@/data/products";
+import { createClient } from "@/lib/supabase/server";
+import { productSelect, toProduct } from "@/lib/storefront";
 import Link from "next/link";
 
-export default function NewArrivalsPage() {
-  const newArrivals = products.filter((product) => product.featured);
+export default async function NewArrivalsPage() {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("products").select(productSelect).eq("featured", true).order("created_at", { ascending: false });
+  if (error) throw new Error(`Unable to load new arrivals: ${error.message}`);
+  const newArrivals = (data ?? []).map(toProduct);
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-12 md:px-6">

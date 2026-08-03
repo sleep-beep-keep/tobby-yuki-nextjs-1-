@@ -1,12 +1,16 @@
 import { notFound } from "next/navigation";
-import { products } from "@/data/products";
 import { Truck, RotateCcw, ShieldCheck } from "lucide-react";
 import ProductActions from "@/components/ProductActions";
+import { createClient } from "@/lib/supabase/server";
+import { productSelect, toProduct } from "@/lib/storefront";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = products.find(p => p.slug === slug);
-  if (!product) notFound();
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("products").select(productSelect).eq("slug", slug).maybeSingle();
+  if (error) throw new Error(`Unable to load product: ${error.message}`);
+  if (!data) notFound();
+  const product = toProduct(data);
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10">
@@ -17,7 +21,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <div className="py-3">
           <p className="text-xs font-semibold uppercase tracking-[.25em] text-mocha">{product.pet} · {product.category}</p>
           <h1 className="mt-3 font-display text-5xl text-cocoa">{product.name}</h1>
-          <div className="mt-4 text-amber-500">★★★★★ <span className="text-sm text-gray-500">({product.reviews} reviews)</span></div>
+          <p className="mt-4 text-sm text-gray-500">Thoughtfully made for everyday adventures.</p>
           <p className="mt-5 text-2xl font-semibold">₹{product.price.toLocaleString("en-IN")}</p>
           <p className="mt-5 leading-7 text-gray-600">{product.description}</p>
           <ProductActions product={product} />

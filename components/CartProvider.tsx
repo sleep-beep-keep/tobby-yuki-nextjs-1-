@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import type { Product } from "@/data/products";
+import type { Product } from "@/lib/storefront";
 
 export type CartItem = Pick<Product, "slug" | "name" | "price" | "image"> & { quantity: number; size?: string };
 type CartContextValue = {

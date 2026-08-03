@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CheckCircle2, Heart, MapPin } from "lucide-react";
 import Link from "next/link";
-import type { Product } from "@/data/products";
+import type { Product } from "@/lib/storefront";
 import { useCart } from "./CartProvider";
 
 export default function ProductActions({ product }: { product: Product }) {

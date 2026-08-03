@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Heart } from "lucide-react";
-import type { Product } from "@/data/products";
+import type { Product } from "@/lib/storefront";
 import { useCart } from "./CartProvider";
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -30,7 +30,7 @@ export default function ProductCard({ product }: { product: Product }) {
           <h3 className="font-medium text-ink">{product.name}</h3>
         </Link>
         <p className="mt-1 font-semibold text-cocoa">₹{product.price.toLocaleString("en-IN")}</p>
-        <div className="mt-2 text-xs text-amber-500">★★★★★ <span className="text-gray-500">({product.reviews})</span></div>
+        <p className="mt-2 text-xs text-gray-500">Thoughtfully made for everyday adventures.</p>
         <button onClick={() => addItem(product)} className="mt-4 w-full rounded-full bg-cocoa py-2.5 text-sm font-semibold text-white transition hover:bg-mocha">
           Quick Add
         </button>
