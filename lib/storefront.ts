@@ -11,27 +11,27 @@ export type Product = {
 
 type ProductRow = {
   slug: string;
-  name: string;
-  price_paise: number;
-  pet: "dogs" | "cats";
+  title: string;
+  base_price: number;
+  pet_type: "dog" | "cat";
   category: string;
-  image_url: string;
+  images: string;
   description: string;
-  featured: boolean;
+  is_featured: boolean;
 };
 
 /** Converts the storefront database shape to the shape used by UI components. */
 export function toProduct(row: ProductRow): Product {
   return {
     slug: row.slug,
-    name: row.name,
-    price: row.price_paise / 100,
-    pet: row.pet,
+    name: row.title,
+    price: row.base_price,
+    pet: row.pet_type === "dog" ? "dogs" : "cats",
     category: row.category,
-    image: row.image_url,
+    image: row.images,
     description: row.description,
-    featured: row.featured,
+    featured: row.is_featured,
   };
 }
 
-export const productSelect = "slug, name, price_paise, pet, category, image_url, description, featured";
+export const productSelect = "slug, title, base_price, pet_type, category, images, description, is_featured";

@@ -5,8 +5,8 @@ import { productSelect, toProduct } from "@/lib/storefront";
 export default async function DogsPage() {
   const supabase = await createClient();
   const [{ data: productRows, error: productError }, { data: categoryRows, error: categoryError }] = await Promise.all([
-    supabase.from("products").select(productSelect).eq("pet", "dogs").order("created_at", { ascending: false }),
-    supabase.from("products").select("category").eq("pet", "dogs").order("category"),
+    supabase.from("products").select(productSelect).eq("pet_type", "dog").order("created_at", { ascending: false }),
+    supabase.from("products").select("category").eq("pet_type", "dog").order("category"),
   ]);
   if (productError) throw new Error(`Unable to load dog products: ${productError.message}`);
   if (categoryError) throw new Error(`Unable to load dog categories: ${categoryError.message}`);

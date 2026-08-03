@@ -10,7 +10,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
 
   if (normalized !== "coming-soon") {
     let query = supabase.from("products").select(productSelect).order("created_at", { ascending: false });
-    query = normalized === "new-arrivals" ? query.eq("featured", true).limit(6) : query.eq("category", normalized);
+    query = normalized === "new-arrivals" ? query.eq("is_featured", true).limit(6) : query.eq("category", normalized);
     const { data, error } = await query;
     if (error) throw new Error(`Unable to load products in ${normalized}: ${error.message}`);
     filtered = (data ?? []).map(toProduct);

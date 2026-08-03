@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default async function NewArrivalsPage() {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("products").select(productSelect).eq("featured", true).order("created_at", { ascending: false });
+  const { data, error } = await supabase.from("products").select(productSelect).eq("is_featured", true).order("created_at", { ascending: false });
   if (error) throw new Error(`Unable to load new arrivals: ${error.message}`);
   const newArrivals = (data ?? []).map(toProduct);
 
