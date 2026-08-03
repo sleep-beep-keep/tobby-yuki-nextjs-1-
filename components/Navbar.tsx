@@ -38,7 +38,7 @@ export default function Navbar() {
           </div>
           <div className="flex items-center gap-4">
             <button aria-label="Search"><Search size={20} /></button>
-            <Link href="/account" aria-label={accountLabel} className="hidden items-center gap-2 text-sm font-semibold text-cocoa sm:flex"><UserRound size={20} /><span>{accountLabel}</span></Link>
+            <Link href="/account" aria-label={accountLabel} title={accountLabel} className="flex items-center gap-2 text-sm font-semibold text-cocoa"><UserRound size={20} /><span className="hidden min-[420px]:inline">{accountLabel}</span></Link>
             <button aria-label="Wishlist"><Heart size={20} /></button>
             <Link href="/cart" aria-label={`Cart with ${itemCount} items`} className="relative"><ShoppingBag size={21} />{itemCount > 0 && <span className="absolute -right-2 -top-2 grid h-4 min-w-4 place-items-center rounded-full bg-rose px-1 text-[10px] font-bold text-white">{itemCount}</span>}</Link>
           </div>
