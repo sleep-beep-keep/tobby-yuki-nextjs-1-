@@ -1,0 +1,1 @@
+Place your Tobby & Yuki logo and actual product/lifestyle images in this folder. The starter currently uses remote Unsplash placeholder images for demo purposes.
