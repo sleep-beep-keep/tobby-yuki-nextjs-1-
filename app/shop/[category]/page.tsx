@@ -1,4 +1,4 @@
-import ProductGrid from "@/components/ProductGrid";
+import SortableProductGrid from "@/components/SortableProductGrid";
 import { products } from "@/data/products";
 
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
@@ -23,7 +23,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           <div className="text-5xl">🐾</div><h2 className="mt-4 font-display text-4xl text-cocoa">Coming soon</h2>
           <p className="mx-auto mt-3 max-w-md text-gray-600">Join the Pawsome Club to be the first to know when our newest designs arrive.</p>
         </div>
-      ) : <ProductGrid products={filtered} />}
+      ) : <SortableProductGrid products={filtered} />}
     </main>
   );
 }

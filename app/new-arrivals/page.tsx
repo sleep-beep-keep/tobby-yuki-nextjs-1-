@@ -1,4 +1,4 @@
-import ProductGrid from "@/components/ProductGrid";
+import SortableProductGrid from "@/components/SortableProductGrid";
 import { products } from "@/data/products";
 import Link from "next/link";
 
@@ -25,7 +25,7 @@ export default function NewArrivalsPage() {
         </Link>
       </div>
 
-      <ProductGrid products={newArrivals} />
+      <SortableProductGrid products={newArrivals} />
     </main>
   );
 }

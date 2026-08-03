@@ -67,9 +67,9 @@ export default function Hero() {
           >
             <img src={slide.image} alt={slide.alt} className="absolute inset-0 h-full w-full object-cover object-right" />
             <div className={`absolute inset-0 bg-gradient-to-r ${slide.wash} to-transparent`} />
-            <div className="relative flex min-h-[540px] max-w-xl flex-col justify-center px-8 py-16 md:px-14">
+            <div className="relative flex min-h-[540px] max-w-xl flex-col justify-center px-8 py-16 md:max-w-2xl md:px-14">
               <p className="text-xs font-semibold uppercase tracking-[.25em] text-mocha">{slide.eyebrow}</p>
-              <h1 className="mt-4 font-display text-5xl leading-[.98] text-cocoa md:text-7xl">{slide.title}</h1>
+              <h1 className="mt-4 font-display text-5xl leading-[.98] text-cocoa md:text-6xl">{slide.title}</h1>
               <p className="mt-6 max-w-md text-lg leading-7 text-ink/75">{slide.description}</p>
               <p className="mt-6 text-sm font-semibold text-cocoa">{slide.product}</p>
               <div className="mt-4 flex flex-wrap gap-3">

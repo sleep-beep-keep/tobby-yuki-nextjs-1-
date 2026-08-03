@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="mt-20 bg-cocoa px-6 py-14 text-white">
-      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-4">
+      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-5">
 
         <div className="md:col-span-2">
           <h2 className="font-display text-3xl">
@@ -36,9 +36,19 @@ export default function Footer() {
 
           <div className="mt-4 flex flex-col space-y-2 text-sm text-white/70">
             <Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link>
-            <Link href="/shipping" className="hover:text-white transition-colors">Shipping & Returns</Link>
+            <Link href="/shipping" className="hover:text-white transition-colors">Shipping Information</Link>
+            <Link href="/refund-cancellation-policy" className="hover:text-white transition-colors">Refund & Cancellation</Link>
             <Link href="/size-guide" className="hover:text-white transition-colors">Size Guide</Link>
             <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp Support</a>
+          </div>
+        </div>
+
+        <div>
+          <h3 className="font-semibold">Legal</h3>
+          <div className="mt-4 flex flex-col space-y-2 text-sm text-white/70">
+            <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="/refund-cancellation-policy" className="hover:text-white transition-colors">Refund &amp; Cancellation Policy</Link>
           </div>
         </div>
 

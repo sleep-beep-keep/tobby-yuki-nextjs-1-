@@ -1,4 +1,4 @@
-import ProductGrid from "@/components/ProductGrid";
+import SortableProductGrid from "@/components/SortableProductGrid";
 import { products, dogCategories } from "@/data/products";
 
 export default function DogsPage() {
@@ -13,7 +13,7 @@ export default function DogsPage() {
       <div className="my-8 flex gap-2 overflow-x-auto pb-2">
         {dogCategories.map(c => <a key={c} href={`/shop/${c}`} className="whitespace-nowrap rounded-full border px-5 py-2 text-sm capitalize hover:bg-cocoa hover:text-white">{c.replace("-", " ")}</a>)}
       </div>
-      <ProductGrid products={dogProducts} />
+      <SortableProductGrid products={dogProducts} />
     </main>
   );
 }

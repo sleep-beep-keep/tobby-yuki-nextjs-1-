@@ -8,18 +8,18 @@ import { useCart } from "./CartProvider";
 export default function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
   return (
-    <article className="group relative overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-soft">
+    <article className="group relative overflow-hidden rounded-2xl border border-black/[0.07] bg-white shadow-[0_2px_8px_rgba(46,32,28,0.05)] transition duration-300 hover:-translate-y-1 hover:border-black/10 hover:shadow-[0_14px_30px_rgba(46,32,28,0.12)]">
       <Link href={`/product/${product.slug}`}>
-        <div className="relative m-2 aspect-square overflow-hidden rounded-xl bg-gradient-to-br from-[#f5e9df] to-[#eee4f2]">
+        <div className="relative m-3 aspect-square overflow-hidden rounded-[1.15rem] border border-black/[0.06] bg-[#faf8f5] p-1.5 shadow-[0_6px_16px_rgba(46,32,28,0.08)] transition duration-300 group-hover:shadow-[0_10px_22px_rgba(46,32,28,0.12)]">
           <img
             src={product.image}
             alt={product.name}
-            className="h-full w-full object-cover p-2 mix-blend-multiply transition duration-500 group-hover:scale-105"
+            className="h-full w-full rounded-[0.9rem] object-cover transition duration-500 group-hover:scale-[1.03]"
           />
           <button
             aria-label={`Add ${product.name} to wishlist`}
             onClick={(e) => e.preventDefault()}
-            className="absolute right-3 top-3 rounded-full bg-white/90 p-2"
+            className="absolute right-5 top-5 rounded-full border border-black/5 bg-white/95 p-2 shadow-sm transition hover:scale-105"
           >
             <Heart size={17} />
           </button>
