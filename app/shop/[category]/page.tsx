@@ -1,12 +1,12 @@
 import SortableProductGrid from "@/components/SortableProductGrid";
 import { createClient } from "@/lib/supabase/server";
-import { productSelect, toProduct } from "@/lib/storefront";
+import { productSelect, toProduct, type Product } from "@/lib/storefront";
 
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;
   const normalized = decodeURIComponent(category).toLowerCase();
   const supabase = await createClient();
-  let filtered = [];
+  let filtered: Product[] = [];
 
   if (normalized !== "coming-soon") {
     let query = supabase.from("products").select(productSelect).order("created_at", { ascending: false });
