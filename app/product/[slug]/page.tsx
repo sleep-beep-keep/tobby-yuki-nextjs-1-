@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { Truck, RotateCcw, ShieldCheck } from "lucide-react";
 import ProductActions from "@/components/ProductActions";
 import { createClient } from "@/lib/supabase/server";
-import { productSelect, toProduct } from "@/lib/storefront";
+import { productSelect, toProduct, toProductVariant } from "@/lib/storefront";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -11,6 +11,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   if (error) throw new Error(`Unable to load product: ${error.message}`);
   if (!data) notFound();
   const product = toProduct(data);
+  const { data: variantRows, error: variantsError } = await supabase
+    .from("product_variants")
+    .select("id, name, price_paise, stock_quantity")
+    .eq("product_id", data.id)
+    .eq("active", true)
+    .order("name");
+  if (variantsError) throw new Error(`Unable to load product options: ${variantsError.message}`);
+  const variants = (variantRows ?? []).map(toProductVariant);
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10">
@@ -24,7 +32,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <p className="mt-4 text-sm text-gray-500">Thoughtfully made for everyday adventures.</p>
           <p className="mt-5 text-2xl font-semibold">₹{product.price.toLocaleString("en-IN")}</p>
           <p className="mt-5 leading-7 text-gray-600">{product.description}</p>
-          <ProductActions product={product} />
+          <ProductActions product={product} variants={variants} />
           <div className="mt-8 grid grid-cols-3 gap-3 border-t pt-6 text-center text-xs">
             <div><Truck className="mx-auto mb-2" size={20}/><p>Free shipping</p></div>
             <div><RotateCcw className="mx-auto mb-2" size={20}/><p>Easy returns</p></div>

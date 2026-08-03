@@ -9,6 +9,13 @@ export type Product = {
   featured: boolean;
 };
 
+export type ProductVariant = {
+  id: string;
+  name: string;
+  pricePaise: number | null;
+  stockQuantity: number;
+};
+
 type ProductRow = {
   slug: string;
   title: string;
@@ -34,4 +41,13 @@ export function toProduct(row: ProductRow): Product {
   };
 }
 
-export const productSelect = "slug, title, base_price, pet_type, category, images, description, is_featured";
+export const productSelect = "id, slug, title, base_price, pet_type, category, images, description, is_featured";
+
+export function toProductVariant(row: { id: string; name: string; price_paise: number | null; stock_quantity: number }): ProductVariant {
+  return {
+    id: row.id,
+    name: row.name,
+    pricePaise: row.price_paise,
+    stockQuantity: row.stock_quantity,
+  };
+}
