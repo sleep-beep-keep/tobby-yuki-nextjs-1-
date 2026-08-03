@@ -26,7 +26,7 @@ export async function POST(request: Request) {
   const { data: { user } } = await auth.auth.getUser();
   if (!user) return NextResponse.json({ error: "Please sign in before placing an order." }, { status: 401 });
 
-  let body: { items?: unknown; shippingAddress?: ShippingAddress };
+  let body: { items?: unknown; shippingAddress?: ShippingAddress; saveAddress?: boolean };
   try {
     body = await request.json();
   } catch {
@@ -111,6 +111,21 @@ export async function POST(request: Request) {
   if (itemsError) {
     await admin.from("orders").delete().eq("id", order.id);
     return NextResponse.json({ error: "Unable to save order items. Please try again." }, { status: 500 });
+  }
+
+  if (body.saveAddress) {
+    await admin.from("addresses").insert({
+      user_id: user.id,
+      recipient_name: shippingAddress.recipient_name,
+      phone: shippingAddress.phone,
+      line_1: shippingAddress.line_1,
+      line_2: shippingAddress.line_2 || null,
+      city: shippingAddress.city,
+      state: shippingAddress.state,
+      postal_code: shippingAddress.postal_code,
+      country: shippingAddress.country || "India",
+      is_default: false,
+    });
   }
 
   return NextResponse.json({ orderNumber: order.order_number }, { status: 201 });
