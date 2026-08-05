@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 export default function AuthForm() {
@@ -12,6 +12,7 @@ export default function AuthForm() {
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -26,8 +27,8 @@ export default function AuthForm() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) setMessage(error.message);
       else {
-        router.replace("/account");
-        router.refresh();
+        const redirectUrl = searchParams.get("redirect") || "/";
+        router.replace(redirectUrl);
       }
     }
 

@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { ChevronDown, Heart, Menu, PawPrint, Search, ShoppingBag, UserRound } from "lucide-react";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useState, useMemo } from "react";
 import { useCart } from "./CartProvider";
 import { useAuth } from "./AuthProvider";
 
@@ -16,7 +17,11 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { itemCount } = useCart();
   const { user, loading } = useAuth();
-  const accountLabel = loading ? "Account" : user ? "Profile" : "Sign in";
+  const pathname = usePathname();
+  const accountLabel = useMemo(() => (loading ? "Account" : user ? "Profile" : "Sign in"), [user, loading]);
+  const accountHref = useMemo(() => {
+    return user || pathname === "/account" ? "/account" : `/account?redirect=${encodeURIComponent(pathname)}`;
+  }, [user, pathname]);
 
   return (
     <>
@@ -38,7 +43,7 @@ export default function Navbar() {
           </div>
           <div className="flex items-center gap-4">
             <button aria-label="Search"><Search size={20} /></button>
-            <Link href="/account" aria-label={accountLabel} title={accountLabel} className="flex items-center gap-2 text-sm font-semibold text-cocoa"><UserRound size={20} /><span className="hidden min-[420px]:inline">{accountLabel}</span></Link>
+            <Link href={accountHref} aria-label={accountLabel} title={accountLabel} className="flex items-center gap-2 text-sm font-semibold text-cocoa"><UserRound size={20} /><span className="hidden min-[420px]:inline">{accountLabel}</span></Link>
             <button aria-label="Wishlist"><Heart size={20} /></button>
             <Link href="/cart" aria-label={`Cart with ${itemCount} items`} className="relative"><ShoppingBag size={21} />{itemCount > 0 && <span className="absolute -right-2 -top-2 grid h-4 min-w-4 place-items-center rounded-full bg-rose px-1 text-[10px] font-bold text-white">{itemCount}</span>}</Link>
           </div>
