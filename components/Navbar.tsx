@@ -18,7 +18,14 @@ export default function Navbar() {
   const { itemCount } = useCart();
   const { user, loading } = useAuth();
   const pathname = usePathname();
-  const accountLabel = useMemo(() => (loading ? "Account" : user ? "Profile" : "Sign in"), [user, loading]);
+  const accountLabel = useMemo(() => {
+    if (loading) return "Account";
+    if (user) {
+      const firstName = user.user_metadata?.full_name?.split(" ")[0];
+      return firstName || "Profile";
+    }
+    return "Sign in";
+  }, [user, loading]);
   const accountHref = useMemo(() => {
     return user || pathname === "/account" ? "/account" : `/account?redirect=${encodeURIComponent(pathname)}`;
   }, [user, pathname]);
