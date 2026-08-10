@@ -1,5 +1,5 @@
-import Link from "next/link";
 import ConfirmEmailButton from "@/components/ConfirmEmailButton";
+import ConfirmEmailCodeForm from "@/components/ConfirmEmailCodeForm";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -32,7 +32,9 @@ function getConfirmationUrl(searchParams: SearchParams) {
 }
 
 export default async function ConfirmEmailPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
-  const confirmationUrl = getConfirmationUrl(await searchParams);
+  const params = await searchParams;
+  const email = firstValue(params.email);
+  const confirmationUrl = getConfirmationUrl(params);
 
-  return <main className="mx-auto flex min-h-[65vh] max-w-md items-center px-4 py-12"><section className="w-full rounded-3xl border border-black/5 bg-white p-7 text-center shadow-soft md:p-9"><p className="text-xs font-semibold uppercase tracking-[.25em] text-mocha">Tobby &amp; Yuki</p><h1 className="mt-3 font-display text-4xl text-cocoa">Confirm your email</h1>{confirmationUrl ? <><p className="mt-4 leading-7 text-gray-600">Click the button below to verify your email address and finish setting up your account.</p><div className="mt-7"><ConfirmEmailButton confirmationUrl={confirmationUrl} /></div></> : <><p className="mt-4 leading-7 text-gray-600">This confirmation link is incomplete or invalid. Please request a new confirmation email.</p><Link href="/account" className="mt-7 inline-block rounded-full bg-cocoa px-6 py-3.5 text-sm font-bold text-white transition hover:bg-mocha">Go to sign in</Link></>}</section></main>;
+  return <main className="mx-auto flex min-h-[65vh] max-w-md items-center px-4 py-12"><section className="w-full rounded-3xl border border-black/5 bg-white p-7 text-center shadow-soft md:p-9"><p className="text-xs font-semibold uppercase tracking-[.25em] text-mocha">Tobby &amp; Yuki</p><h1 className="mt-3 font-display text-4xl text-cocoa">Confirm your email</h1>{confirmationUrl ? <><p className="mt-4 leading-7 text-gray-600">Click the button below to verify your email address and finish setting up your account.</p><div className="mt-7"><ConfirmEmailButton confirmationUrl={confirmationUrl} /></div></> : <><p className="mt-4 leading-7 text-gray-600">Enter the email address and confirmation code from your email to finish setting up your account.</p><ConfirmEmailCodeForm initialEmail={email} /></>}</section></main>;
 }
