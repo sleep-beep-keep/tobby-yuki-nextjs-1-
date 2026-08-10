@@ -7,7 +7,7 @@ export type CartItem = Pick<Product, "slug" | "name" | "price" | "image"> & { qu
 type CartContextValue = {
   items: CartItem[];
   itemCount: number;
-  addItem: (product: Product, size?: string) => void;
+  addItem: (product: Product, size?: string, quantity?: number) => void;
   updateQuantity: (slug: string, size: string | undefined, quantity: number) => void;
   removeItem: (slug: string, size?: string) => void;
   clearCart: () => void;
@@ -33,10 +33,11 @@ export default function CartProvider({ children }: { children: React.ReactNode }
     items,
     itemCount: items.reduce((total, item) => total + item.quantity, 0),
     subtotal: items.reduce((total, item) => total + item.price * item.quantity, 0),
-    addItem: (product: Product, size?: string) => setItems((current) => {
+    addItem: (product: Product, size?: string, quantity = 1) => setItems((current) => {
+      const quantityToAdd = Math.max(1, Math.floor(quantity));
       const existing = current.find((item) => item.slug === product.slug && item.size === size);
-      if (existing) return current.map((item) => item === existing ? { ...item, quantity: item.quantity + 1 } : item);
-      return [...current, { slug: product.slug, name: product.name, price: product.price, image: product.image, size, quantity: 1 }];
+      if (existing) return current.map((item) => item === existing ? { ...item, quantity: item.quantity + quantityToAdd } : item);
+      return [...current, { slug: product.slug, name: product.name, price: product.price, image: product.image, size, quantity: quantityToAdd }];
     }),
     updateQuantity: (slug: string, size: string | undefined, quantity: number) => setItems((current) => quantity < 1 ? current.filter((item) => item.slug !== slug || item.size !== size) : current.map((item) => item.slug === slug && item.size === size ? { ...item, quantity } : item)),
     removeItem: (slug: string, size?: string) => setItems((current) => current.filter((item) => item.slug !== slug || item.size !== size)),
