@@ -6,9 +6,13 @@ export default function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-5">
 
         <div className="md:col-span-2">
-          <h2 className="font-display text-3xl">
-            Tobby & Yuki
-          </h2>
+          <Link href="/" aria-label="Tobby & Yuki home" className="inline-block">
+            <img
+              src="/logo.png"
+              alt="Tobby & Yuki — Pawsome by Design"
+              className="h-auto w-56 object-contain"
+            />
+          </Link>
 
           <p className="mt-3 max-w-md text-sm leading-6 text-white/70">
             Premium pet lifestyle essentials designed for the pets who make
