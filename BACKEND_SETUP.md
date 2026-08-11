@@ -10,11 +10,12 @@ The migration creates profiles, addresses, products, variants, carts, orders, or
 
 To access the protected `/admin` dashboard, set `ADMIN_EMAILS` to a comma-separated list of administrator login emails. The page also requires `SUPABASE_SERVICE_ROLE_KEY`; never expose that key through a `NEXT_PUBLIC_` variable.
 
-## Order-status email notifications
+## Order email notifications
 
 1. Run `supabase/migrations/0002_order_status_notifications.sql` in the Supabase SQL Editor.
-2. Verify the sending domain in Resend, then set `RESEND_API_KEY`, `ORDER_EMAIL_FROM`, `ORDER_NOTIFICATION_WEBHOOK_SECRET`, and `NEXT_PUBLIC_SITE_URL` in Netlify.
-3. In **Supabase -> Database -> Webhooks**, create an `UPDATE` webhook for `public.orders` with target URL `https://your-domain.com/api/order-notifications`.
-4. Add a header named `x-order-notification-secret` with the same value as `ORDER_NOTIFICATION_WEBHOOK_SECRET`.
+2. Run `supabase/migrations/0003_order_notification_keys.sql` in the Supabase SQL Editor.
+3. Verify the sending domain in Resend, then set `RESEND_API_KEY`, `ORDER_EMAIL_FROM`, `ORDER_NOTIFICATION_WEBHOOK_SECRET`, `NEXT_PUBLIC_SITE_URL`, and `ADMIN_EMAILS` in Netlify.
+4. In **Supabase -> Database -> Webhooks**, create a webhook for `public.orders` with both `INSERT` and `UPDATE` events enabled. Use target URL `https://your-domain.com/api/order-notifications`.
+5. Add a header named `x-order-notification-secret` with the same value as `ORDER_NOTIFICATION_WEBHOOK_SECRET`.
 
-The handler only sends when `status` changes. It logs the transition in `order_status_notifications` before delivery, which prevents a successful message from being sent again if Supabase repeats the webhook request. Failed messages remain recorded for diagnosis and retry.
+On `INSERT`, the handler sends an order confirmation to the customer and a new-order alert to every email in `ADMIN_EMAILS`. On `UPDATE`, it sends to the customer only when `status` changes. Each email is logged in `order_status_notifications` before delivery, which prevents a successful message from being sent again if Supabase repeats the webhook request. Failed messages remain recorded for diagnosis and retry.
