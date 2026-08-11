@@ -59,7 +59,7 @@ export async function POST(request: Request) {
   const orderNumber = getText(order?.order_number);
   const newStatus = getText(order?.status)?.toLowerCase();
   const updatedAt = getText(order?.updated_at);
-  if (payload.type !== "UPDATE" || !orderId || !orderNumber || !newStatus || !updatedAt) return NextResponse.json({ error: "Unexpected order webhook payload" }, { status: 400 });
+  if (payload.type !== "UPDATE" || !order || !orderId || !orderNumber || !newStatus || !updatedAt) return NextResponse.json({ error: "Unexpected order webhook payload" }, { status: 400 });
   if (newStatus === previousStatus?.toLowerCase()) return NextResponse.json({ message: "Status did not change" });
 
   const address = order.shipping_address && typeof order.shipping_address === "object" ? order.shipping_address as Record<string, unknown> : {};
