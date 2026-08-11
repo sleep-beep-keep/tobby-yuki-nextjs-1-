@@ -70,6 +70,7 @@ For production, I recommend moving product/catalog data to Supabase or another c
 8. Customer accounts and wishlist persistence
 9. Coupon and discount system
 10. GST invoice generation
+11. Email Channel: Resend
 
 ## Important
 
