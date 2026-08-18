@@ -1,8 +1,11 @@
 import { notFound } from "next/navigation";
 import { Truck, RotateCcw, ShieldCheck } from "lucide-react";
 import ProductActions from "@/components/ProductActions";
+import ImageCarousel from "@/components/ImageCarousel";
 import { createClient } from "@/lib/supabase/server";
 import { productSelect, toProduct, toProductVariant } from "@/lib/storefront";
+import fs from "fs";
+import path from "path";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -11,6 +14,21 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   if (error) throw new Error(`Unable to load product: ${error.message}`);
   if (!data) notFound();
   const product = toProduct(data);
+  let images = Array.isArray((data as any).images) ? (data as any).images : [(data as any).images];
+
+  // Prefer images placed in public/products/<slug>/ if available (allows adding local images)
+  try {
+    const publicDir = path.join(process.cwd(), "public", "products", product.slug);
+    if (fs.existsSync(publicDir)) {
+      const files = fs.readdirSync(publicDir).filter((f) => /\.(jpe?g|png|webp|gif|jfif)$/i.test(f));
+      if (files.length > 0) {
+        images = files.map((f) => `/products/${product.slug}/${f}`);
+      }
+    }
+  } catch (e) {
+    // ignore and fall back to DB images
+  }
+
   const { data: variantRows, error: variantsError } = await supabase
     .from("product_variants")
     .select("id, name, price_paise, stock_quantity")
@@ -24,7 +42,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     <main className="mx-auto max-w-7xl px-4 py-10">
       <div className="grid gap-10 md:grid-cols-2">
         <div className="overflow-hidden rounded-3xl bg-ivory">
-          <img src={product.image} alt={product.name} className="aspect-square h-full w-full object-cover" />
+          <ImageCarousel images={images} alt={product.name} />
         </div>
         <div className="py-3">
           <p className="text-xs font-semibold uppercase tracking-[.25em] text-mocha">{product.pet} · {product.category}</p>
